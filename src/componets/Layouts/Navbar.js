@@ -1,195 +1,135 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
     <>
-      {/* Header */}
-      <header className="header-v4">
-        {/* Header desktop */}
-        <div className="container-menu-desktop">
-          <div className="wrap-menu-desktop how-shadow1">
-            <nav className="limiter-menu-desktop container">
-              {/* Logo desktop */}
-              <a href="#" className="logo">
-                <img src="images/icons/logo-01.png" alt="IMG-LOGO" />
-              </a>
-              {/* Menu desktop */}
-              <div className="menu-desktop">
-                <ul className="main-menu">
-                  <li>
-                    <a href="index.html">Home</a>
-                    <ul className="sub-menu">
-                      <li>
-                        <a href="index.html">Homepage 1</a>
-                      </li>
-                      <li>
-                        <a href="home-02.html">Homepage 2</a>
-                      </li>
-                      <li>
-                        <a href="home-03.html">Homepage 3</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="product.html">Shop</a>
-                  </li>
-                  <li className="label1" data-label1="hot">
-                    <a href="shoping-cart.html">Features</a>
-                  </li>
-                  <li>
-                    <a href="blog.html">Blog</a>
-                  </li>
-                  <li>
-                    <a href="about.html">About</a>
-                  </li>
-                  <li>
-                    <a href="contact.html">Contact</a>
-                  </li>
-                </ul>
-              </div>
-              {/* Icon header */}
-              <div className="wrap-icon-header flex-w flex-r-m">
-                <div className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-                  <i className="zmdi zmdi-search" />
-                </div>
-                <div
-                  className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-                  data-notify={2}
-                >
-                  <i className="zmdi zmdi-shopping-cart" />
-                </div>
-                <a
-                  href="#"
-                  className="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-                  data-notify={0}
-                >
-                  <i className="zmdi zmdi-favorite-outline" />
-                </a>
-              </div>
-            </nav>
-          </div>
-        </div>
-        {/* Header Mobile */}
-        <div className="wrap-header-mobile">
-          {/* Logo moblie */}
-          <div className="logo-mobile">
-            <a href="index.html">
-              <img src="images/icons/logo-01.png" alt="IMG-LOGO" />
-            </a>
-          </div>
-          {/* Icon header */}
-          <div className="wrap-icon-header flex-w flex-r-m m-r-15">
-            <div className="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
-              <i className="zmdi zmdi-search" />
+    {/* Offcanvas Menu Begin */}
+    <div className="offcanvas-menu-overlay" />
+    <div className="offcanvas-menu-wrapper">
+      <div className="offcanvas__close">+</div>
+      <ul className="offcanvas__widget">
+        <li>
+          <span className="icon_search search-switch" />
+        </li>
+        <li>
+          <Link to="#">
+            <span className="icon_heart_alt" />
+            <div className="tip">2</div>
+          </Link>
+        </li>
+        <li>
+          <Link to="#">
+            <span className="icon_bag_alt" />
+            <div className="tip">2</div>
+          </Link>
+        </li>
+      </ul>
+      <div className="offcanvas__logo">
+        <Link to="./index.html">
+          {/* <img src="img/logo.png" alt="" /> */}
+        </Link>
+      </div>
+      <div id="mobile-menu-wrap" />
+      <div className="offcanvas__auth">
+        <Link to="#">Login</Link>
+        <Link to="#">Register</Link>
+      </div>
+    </div>
+    {/* Offcanvas Menu End */}
+    {/* Header Section Begin */}
+    <header className="header">
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-xl-3 col-lg-2">
+            <div className="header__logo">
+              <Link to="./index.html">
+                {/* <img src="img/logo.png" alt="" /> */}
+              </Link>
             </div>
-            <div
-              className="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart"
-              data-notify={2}
-            >
-              <i className="zmdi zmdi-shopping-cart" />
-            </div>
-            <a
-              href="#"
-              className="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti"
-              data-notify={0}
-            >
-              <i className="zmdi zmdi-favorite-outline" />
-            </a>
           </div>
-          {/* Button show menu */}
-          <div className="btn-show-menu-mobile hamburger hamburger--squeeze">
-            <span className="hamburger-box">
-              <span className="hamburger-inner" />
-            </span>
-          </div>
-        </div>
-        {/* Menu Mobile */}
-        <div className="menu-mobile">
-          <ul className="topbar-mobile">
-            <li>
-              <div className="left-top-bar">
-                Free shipping for standard order over $100
-              </div>
-            </li>
-            <li>
-              <div className="right-top-bar flex-w h-full">
-                <a href="#" className="flex-c-m p-lr-10 trans-04">
-                  Help &amp; FAQs
-                </a>
-                <a href="#" className="flex-c-m p-lr-10 trans-04">
-                  My Account
-                </a>
-                <a href="#" className="flex-c-m p-lr-10 trans-04">
-                  EN
-                </a>
-                <a href="#" className="flex-c-m p-lr-10 trans-04">
-                  USD
-                </a>
-              </div>
-            </li>
-          </ul>
-          <ul className="main-menu-m">
-            <li>
-              <a href="index.html">Home</a>
-              <ul className="sub-menu-m">
-                <li>
-                  <a href="index.html">Homepage 1</a>
+          <div className="col-xl-6 col-lg-7">
+            <nav className="header__menu">
+              <ul>
+                <li className="active">
+                  <Link to="/">Home</Link>
                 </li>
                 <li>
-                  <a href="home-02.html">Homepage 2</a>
+                  <Link to="/product">Shop</Link>
                 </li>
                 <li>
-                  <a href="home-03.html">Homepage 3</a>
+                  <Link to="#">Pages</Link>
+                  <ul className="dropdown">
+                    <li>
+                      <Link to="./product-details.html">Product Details</Link>
+                    </li>
+                    <li>
+                      <Link to="./shop-cart.html">Shop Cart</Link>
+                    </li>
+                    <li>
+                      <Link to="./checkout.html">Checkout</Link>
+                    </li>
+                    <li>
+                      <Link to="./blog-details.html">Blog Details</Link>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <Link to="./blog.html">Blog</Link>
+                </li>
+                <li>
+                  <Link to="./contact.html">Contact</Link>
+                </li>
+                <li>
+                  <Link to="/admin">Admin </Link>
                 </li>
               </ul>
-              <span className="arrow-main-menu-m">
-                <i className="fa fa-angle-right" aria-hidden="true" />
-              </span>
-            </li>
-            <li>
-              <a href="product.html">Shop</a>
-            </li>
-            <li>
-              <a
-                href="shoping-cart.html"
-                className="label1 rs1"
-                data-label1="hot"
-              >
-                Features
-              </a>
-            </li>
-            <li>
-              <a href="blog.html">Blog</a>
-            </li>
-            <li>
-              <a href="about.html">About</a>
-            </li>
-            <li>
-              <a href="contact.html">Contact</a>
-            </li>
-          </ul>
-        </div>
-        {/* Modal Search */}
-        <div className="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-          <div className="container-search-header">
-            <button className="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-              <img src="images/icons/icon-close2.png" alt="CLOSE" />
-            </button>
-            <form className="wrap-search-header flex-w p-l-15">
-              <button className="flex-c-m trans-04">
-                <i className="zmdi zmdi-search" />
-              </button>
-              <input
-                className="plh3"
-                type="text"
-                name="search"
-                placeholder="Search..."
-              />
-            </form>
+            </nav>
+          </div>
+          <div className="col-lg-3">
+            <div className="header__right">
+              <div className="header__right__auth">
+                <Link to="#">Login</Link>
+                <Link to="#">Register</Link>
+              </div>
+              <ul className="header__right__widget">
+                <li>
+                  <span className="icon_search search-switch" />
+                </li>
+                <li>
+                  <Link to="#">
+                    <span className="icon_heart_alt" />
+                    <div className="tip">2</div>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#">
+                    <span className="icon_bag_alt" />
+                    <div className="tip">2</div>
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </header>
-    </>
+        <div className="canvas__open">
+          <i className="fa fa-bars" />
+        </div>
+      </div>
+    </header>
+    {/* Header Section End */}
+  {/* Search Begin */}
+  <div className="search-model">
+    <div className="h-100 d-flex align-items-center justify-content-center">
+      <div className="search-close-switch">+</div>
+      <form className="search-model-form">
+        <input type="text" id="search-input" placeholder="Search here....." />
+      </form>
+    </div>
+  </div>
+  {/* Search End */}
+  </>
+  
   );
 }
 
