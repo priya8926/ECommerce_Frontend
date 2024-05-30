@@ -13,9 +13,9 @@ export const createNewProduct = (productData) => async(dispatch) =>{
         const data = await fetch(`https://localhost:7283/api/Product/create`,{
             method :"POST",
             headers :{
-                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/json'
             },
-            body : JSON.stringify({productData})
+            body : productData
         })
         dispatch({
             type : NEW_PRODUCT_SUCCESS,

@@ -7,7 +7,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import SpellcheckIcon from "@mui/icons-material/Spellcheck";
 import StorageIcon from "@mui/icons-material/Storage";
 import { clearErros, createNewProduct } from "../actions/productActions";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { Button } from "@mui/material";
 import { NEW_PRODUCT_RESET } from "../Constants/productConstant";
 
@@ -40,30 +40,31 @@ function AddProduct() {
     "Bedsheets",
     "Accerssories",
   ];
+
   useEffect(() => {
-    if (error) {
+    if(error) {
       alert(error);
       dispatch(clearErros());
     }
-    if (success) {
+    if(success) {
       alert("Product created sucessfully");
       dispatch({ type: NEW_PRODUCT_RESET });
       navigate("/product");
     }
-  }, [error, success, dispatch, navigate]);
+  }, [error, success, dispatch, navigate ,alert]);
 
   const createProductSubmitHandler = (e) => {
     e.preventDefault();
 
     const myForm = new FormData();
-    myForm.set("Name", name);
-    myForm.set("Price", price);
-    myForm.set("Description", description);
-    myForm.set("Category", category);
-    myForm.set("Stock", stock);
+    myForm.set("name", name);
+    myForm.set("price", price);
+    myForm.set("description", description);
+    myForm.set("category", category);
+    myForm.set("stock", stock);
 
     images.forEach((img) => {
-      myForm.append("avatar", img);
+      myForm.append("Images", img);
 
     });
     dispatch(createNewProduct(myForm))
@@ -82,7 +83,7 @@ function AddProduct() {
             ...prevImage ,
             reader.result
           ])
-          setImages((prevImage) => [...prevImage , reader.result])
+          setImages((prevImage) => [...prevImage , file])
         }
       }
       reader.readAsDataURL(file)
@@ -101,11 +102,20 @@ function AddProduct() {
             <h2>Create Product</h2>
 
             <div>
-              <SpellcheckIcon />
+            <SpellcheckIcon />
+              <input
+                type="text"
+                placeholder="Product Name"
+                value={name}
+                required
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div>
+              <CurrencyRupeeIcon />
               <input
                 type="number"
                 placeholder="Price"
-                name="Name"
                 required
                 onChange={(e) => setPrice(e.target.value)}
               />
@@ -117,7 +127,6 @@ function AddProduct() {
                 cols="30"
                 rows="5"
                 placeholder="Product Description"
-                name="Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></textarea>
@@ -125,7 +134,7 @@ function AddProduct() {
             <div>
               <AccountTreeIcon />
               <select onChange={(e) => setCategory(e.target.value)}>
-                <option value="" name="Category">Choose Category</option>
+                <option value="" >Choose Category</option>
                 {categories.map((cate) => (
                   <option key={cate} value={cate}>
                     {cate}
@@ -137,7 +146,6 @@ function AddProduct() {
               <StorageIcon />
               <input
                 type="number"
-                name="Stock"
                 placeholder="Stock"
                 required
                 onChange={(e) => setStock(e.target.value)}
@@ -146,7 +154,6 @@ function AddProduct() {
             <div id="createProductFormFile">
               <input
                 type="file"
-                name="avatar"
                 accept="image/*"
                 multiple
                 onChange={createProductOnChange}
@@ -155,7 +162,7 @@ function AddProduct() {
 
             <div id="createProductFormImage">
               {imagePreview.map((image, index) => (
-                <img key={index} src={image} alt="Avatar Preview" />
+                <img key={index} src={image} alt="Product Image" />
               ))}
             </div>
 

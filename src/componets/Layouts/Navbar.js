@@ -78,7 +78,7 @@ function Navbar() {
                   <Link to="./blog.html">Blog</Link>
                 </li>
                 <li>
-                  <Link to="./contact.html">Contact</Link>
+                  <Link to="/contact">Contact</Link>
                 </li>
                 <li>
                   <Link to="/admin">Admin </Link>
@@ -116,8 +116,6 @@ function Navbar() {
           <i className="fa fa-bars" />
         </div>
       </div>
-    </header>
-    {/* Header Section End */}
   {/* Search Begin */}
   <div className="search-model">
     <div className="h-100 d-flex align-items-center justify-content-center">
@@ -128,6 +126,8 @@ function Navbar() {
     </div>
   </div>
   {/* Search End */}
+    </header>
+    {/* Header Section End */}
   </>
   
   );
