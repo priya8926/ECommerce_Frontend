@@ -59,7 +59,7 @@ function Contact() {
         {uploadedFile && (
           <div>
             <h3>Uploaded File:</h3>
-            <img src={`https://localhost:7283/Files/upload/${uploadedFile}`} alt="Uploaded" />
+            <img src={`D:/csharp/Project2/backend/backend/wwwroot/Files/${uploadedFile}`} alt="Uploaded" />
           </div>
         )}
       </div>

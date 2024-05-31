@@ -5,6 +5,7 @@ import Navbar from "./componets/Layouts/Navbar.js";
 import Product from "./componets/Products/Product.js";
 import AddProduct from "./componets/Admin/AddProduct.js";
 import Contact from "./componets/Contact/Contact.js";
+import ProductDetails from "./componets/Products/ProductDetails.js";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/product" element={<Product/>} />
         <Route path="/admin" element={<AddProduct/>} />
         <Route path="/contact" element={<Contact/>} />
+        <Route path="/Product/:id" element={<ProductDetails/>} />
       </Routes>
     </>
   );

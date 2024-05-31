@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getProduct } from "../actions/productActions";
+import {Link } from "react-router-dom"
+import './Product.css'
 
 function Product() {
+  const dispatch = useDispatch();
+  const categories = [
+    "Footwear",
+    "Jackets",
+    "Blazers",
+    "Jumpsuits",
+    "Sportswear",
+    "Kurti",
+    "Swimwear",
+    "Jeans",
+    "Shirts",
+    "Laptop",
+    "Smartphone",
+    "Bedsheets",
+    "Accerssories",
+  ];
+  const { loading, error, products } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+    dispatch(getProduct());
+  }, [dispatch, error, alert]);
+
   return (
     <>
       {/* Breadcrumb Begin */}
@@ -9,9 +38,9 @@ function Product() {
           <div className="row">
             <div className="col-lg-12">
               <div className="breadcrumb__links">
-                <a href="./index.html">
+                <Link to="./index.html">
                   <i className="fa fa-home" /> Home
-                </a>
+                </Link>
                 <span>Shop</span>
               </div>
             </div>
@@ -33,9 +62,9 @@ function Product() {
                     <div className="accordion" id="accordionExample">
                       <div className="card">
                         <div className="card-heading active">
-                          <a data-toggle="collapse" data-target="#collapseOne">
+                          <Link data-toggle="collapse" data-target="#collapseOne">
                             Women
-                          </a>
+                          </Link>
                         </div>
                         <div
                           id="collapseOne"
@@ -45,22 +74,22 @@ function Product() {
                           <div className="card-body">
                             <ul>
                               <li>
-                                <a href="#">Coats</a>
+                                <Link to="#">Coats</Link>
                               </li>
                               <li>
-                                <a href="#">Jackets</a>
+                                <Link to="#">Jackets</Link>
                               </li>
                               <li>
-                                <a href="#">Dresses</a>
+                                <Link to="#">Dresses</Link>
                               </li>
                               <li>
-                                <a href="#">Shirts</a>
+                                <Link to="#">Shirts</Link>
                               </li>
                               <li>
-                                <a href="#">T-shirts</a>
+                                <Link to="#">T-shirts</Link>
                               </li>
                               <li>
-                                <a href="#">Jeans</a>
+                                <Link to="#">Jeans</Link>
                               </li>
                             </ul>
                           </div>
@@ -68,9 +97,9 @@ function Product() {
                       </div>
                       <div className="card">
                         <div className="card-heading">
-                          <a data-toggle="collapse" data-target="#collapseTwo">
+                          <Link data-toggle="collapse" data-target="#collapseTwo">
                             Men
-                          </a>
+                          </Link>
                         </div>
                         <div
                           id="collapseTwo"
@@ -80,22 +109,22 @@ function Product() {
                           <div className="card-body">
                             <ul>
                               <li>
-                                <a href="#">Coats</a>
+                                <Link to="#">Coats</Link>
                               </li>
                               <li>
-                                <a href="#">Jackets</a>
+                                <Link to="#">Jackets</Link>
                               </li>
                               <li>
-                                <a href="#">Dresses</a>
+                                <Link to="#">Dresses</Link>
                               </li>
                               <li>
-                                <a href="#">Shirts</a>
+                                <Link to="#">Shirts</Link>
                               </li>
                               <li>
-                                <a href="#">T-shirts</a>
+                                <Link to="#">T-shirts</Link>
                               </li>
                               <li>
-                                <a href="#">Jeans</a>
+                                <Link to="#">Jeans</Link>
                               </li>
                             </ul>
                           </div>
@@ -103,12 +132,12 @@ function Product() {
                       </div>
                       <div className="card">
                         <div className="card-heading">
-                          <a
+                          <Link
                             data-toggle="collapse"
                             data-target="#collapseThree"
                           >
                             Kids
-                          </a>
+                          </Link>
                         </div>
                         <div
                           id="collapseThree"
@@ -118,22 +147,22 @@ function Product() {
                           <div className="card-body">
                             <ul>
                               <li>
-                                <a href="#">Coats</a>
+                                <Link to="#">Coats</Link>
                               </li>
                               <li>
-                                <a href="#">Jackets</a>
+                                <Link to="#">Jackets</Link>
                               </li>
                               <li>
-                                <a href="#">Dresses</a>
+                                <Link to="#">Dresses</Link>
                               </li>
                               <li>
-                                <a href="#">Shirts</a>
+                                <Link to="#">Shirts</Link>
                               </li>
                               <li>
-                                <a href="#">T-shirts</a>
+                                <Link to="#">T-shirts</Link>
                               </li>
                               <li>
-                                <a href="#">Jeans</a>
+                                <Link to="#">Jeans</Link>
                               </li>
                             </ul>
                           </div>
@@ -141,9 +170,9 @@ function Product() {
                       </div>
                       <div className="card">
                         <div className="card-heading">
-                          <a data-toggle="collapse" data-target="#collapseFour">
+                          <Link data-toggle="collapse" data-target="#collapseFour">
                             Accessories
-                          </a>
+                          </Link>
                         </div>
                         <div
                           id="collapseFour"
@@ -153,22 +182,22 @@ function Product() {
                           <div className="card-body">
                             <ul>
                               <li>
-                                <a href="#">Coats</a>
+                                <Link to="#">Coats</Link>
                               </li>
                               <li>
-                                <a href="#">Jackets</a>
+                                <Link to="#">Jackets</Link>
                               </li>
                               <li>
-                                <a href="#">Dresses</a>
+                                <Link to="#">Dresses</Link>
                               </li>
                               <li>
-                                <a href="#">Shirts</a>
+                                <Link to="#">Shirts</Link>
                               </li>
                               <li>
-                                <a href="#">T-shirts</a>
+                                <Link to="#">T-shirts</Link>
                               </li>
                               <li>
-                                <a href="#">Jeans</a>
+                                <Link to="#">Jeans</Link>
                               </li>
                             </ul>
                           </div>
@@ -176,9 +205,9 @@ function Product() {
                       </div>
                       <div className="card">
                         <div className="card-heading">
-                          <a data-toggle="collapse" data-target="#collapseFive">
+                          <Link data-toggle="collapse" data-target="#collapseFive">
                             Cosmetic
-                          </a>
+                          </Link>
                         </div>
                         <div
                           id="collapseFive"
@@ -188,22 +217,22 @@ function Product() {
                           <div className="card-body">
                             <ul>
                               <li>
-                                <a href="#">Coats</a>
+                                <Link to="#">Coats</Link>
                               </li>
                               <li>
-                                <a href="#">Jackets</a>
+                                <Link to="#">Jackets</Link>
                               </li>
                               <li>
-                                <a href="#">Dresses</a>
+                                <Link to="#">Dresses</Link>
                               </li>
                               <li>
-                                <a href="#">Shirts</a>
+                                <Link to="#">Shirts</Link>
                               </li>
                               <li>
-                                <a href="#">T-shirts</a>
+                                <Link to="#">T-shirts</Link>
                               </li>
                               <li>
-                                <a href="#">Jeans</a>
+                                <Link to="#">Jeans</Link>
                               </li>
                             </ul>
                           </div>
@@ -230,7 +259,7 @@ function Product() {
                       </div>
                     </div>
                   </div>
-                  <a href="#">Filter</a>
+                  <Link to="#">Filter</Link>
                 </div>
                 <div className="sidebar__sizes">
                   <div className="section-title">
@@ -330,56 +359,35 @@ function Product() {
             </div>
             <div className="col-lg-9 col-md-9">
               <div className="row">
-                <div className="col-lg-4 col-md-6">
-                  <div className="product__item">
-                    <div
-                      className="product__item__pic set-bg"
-                      img= "http://127.0.0.1:5500/img/shop/shop-1.jpg"
-                      data-setbg="/img/shop/shop-1.jpg"
-                    >
-                      <div className="label new">New</div>
-                      <ul className="product__hover">
-                        <li>
-                          <a href="img/shop/shop-1.jpg" className="image-popup">
-                            <span className="arrow_expand" />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            <span className="icon_heart_alt" />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            <span className="icon_bag_alt" />
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="product__item__text">
-                      <h6>
-                        <a href="#">Furry hooded parka</a>
-                      </h6>
-                      <div className="rating">
-                        <i className="fa fa-star" />
-                        <i className="fa fa-star" />
-                        <i className="fa fa-star" />
-                        <i className="fa fa-star" />
-                        <i className="fa fa-star" />
+                {products &&
+                  products.map((item) => (
+                    <div className="col-lg-4 col-md-6" key={item.id}>
+                      <div className="product__item mt-5">
+                      <Link to={`/Product/${item.productsId}`}>
+                      <div className="product__item__pic text-center">
+                        {item.imgs && item.imgs.length > 0 && (
+                          <img src={`https://localhost:7283/Files/${item.imgs[0].fileName}`} alt={item.name} />
+                        )}
                       </div>
-                      <div className="product__price">$ 59.0</div>
+                    </Link>
+                      </div>
+                      <div className="product__item__text">
+                        <h6>
+                          <Link to="#">{item.name}</Link>
+                        </h6>
+                        <div className="product__price ">₹{item.price}</div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="col-lg-12 text-center">
-                  <div className="pagination__option">
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">
-                      <i className="fa fa-angle-right" />
-                    </a>
-                  </div>
+                  ))}
+              </div>
+              <div className="col-lg-12 text-center">
+                <div className="pagination__option">
+                  <Link to="#">1</Link>
+                  <Link to="#">2</Link>
+                  <Link to="#">3</Link>
+                  <Link to="#">
+                    <i className="fa fa-angle-right" />
+                  </Link>
                 </div>
               </div>
             </div>

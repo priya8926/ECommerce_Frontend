@@ -35,6 +35,7 @@ function AddProduct() {
     "Swimwear",
     "Jeans",
     "Shirts",
+    "Bags",
     "Laptop",
     "Smartphone",
     "Bedsheets",
