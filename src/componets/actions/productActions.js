@@ -61,12 +61,13 @@ export const getProductDetails = (id) => async (dispatch) => {
         dispatch({
             type: PRODUCTS_DETAILS_REQUEST,
         })
-        const {data} = await fetch(`https://localhost:7283/api/Product/${id}` , {
+        const response = await fetch(`https://localhost:7283/api/Product/${id}` , {
           method : "GET"
         })
+        const data = await response.json()
         dispatch({
             type: PRODUCTS_DETAILS_SUCCESS,
-            payload: data.product
+            payload: {product : data.product}
         })
     } catch (error) {
         dispatch({
