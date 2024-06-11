@@ -2,20 +2,33 @@ import React, { useEffect, useRef, useState } from "react";
 
 function Students() {
   const [allStudents, setAllStudents] = useState([]);
-  const [department, setDepartment] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const ref = useRef()
 
-  const departments = [
-    "Computer Engineering",
-    "Mechanical Engineering",
-    "Electrical Engineering",
-    "Chemical Engineering",
-    " Biomedical Engineering",
-    "  Aerospace Engineering",
-    "Civil Engineering",
-    "Information Technology",
-  ];
+  
+  const [departments, setDepartments] = useState([]);
+  
+  useEffect(() => {
+    const fetchDepartment = async () => {
+      try {
+        const response = await fetch(`https://localhost:7283/api/Department/all`, {
+          method: "GET",
+          headers: {
+            'Content-type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setDepartments(data);
+        }
+      } catch (error) {
+        console.log("Error fetching departments:", error);
+      }
+    };
+
+    fetchDepartment();
+  }, []);
+
   const getAllStd = async () => {
     try {
       const response = await fetch(`https://localhost:7283/api/Student/all`, {
@@ -31,10 +44,10 @@ function Students() {
     }
   };
 
-  const getStdByDepartment = async (department) => {
+  const getStdByDepartment = async (departmentId) => {
     try {
       const response = await fetch(
-        `https://localhost:7283/api/Student/${department}`,
+        `https://localhost:7283/api/Student/${departmentId}`,
         {
           method: "GET",
         }
@@ -50,7 +63,7 @@ function Students() {
 
   const handleDepartmentChange = (e) => {
     const selectDepartment = e.target.value;
-    setDepartment(selectDepartment);
+    setDepartments(selectDepartment);
 
     if (selectDepartment === "") {
       getAllStd();
@@ -111,7 +124,6 @@ function Students() {
                 <p><strong>Last Name :</strong> {selectedStudent.lastName}</p>
                 <p><strong>Email:</strong> {selectedStudent.email}</p>
                 <p><strong>Enrollment Number:</strong> {selectedStudent.enrollmentNo}</p>
-                <p><strong>Department:</strong> {selectedStudent.department}</p>
                 <p><strong>BirthDate:</strong> {selectedStudent.dateOfBirth}</p>
                 <p><strong>Contact:</strong> {selectedStudent.phoneNumber}</p>
                 <p><strong>Gender :</strong> {selectedStudent.gender}</p>
@@ -142,15 +154,15 @@ function Students() {
         </span>
         <select
           onChange={handleDepartmentChange}
-          value={department}
-          name="department"
+          value={departments}
+          name="departments"
         >
           <option value="">Select Department</option>
-          {departments.map((d) => (
-            <option key={d} value={d}>
-              {d}
-            </option>
-          ))}
+          {Array.isArray(departments) && departments.map((d) => (
+                  <option key={d.departmentId} value={d.departmentId}>
+                    {d.departmentName}
+                  </option>
+                ))}
         </select>
       </div>
       {allStudents.length > 0 ? (
@@ -164,7 +176,6 @@ function Students() {
               <th scope="col">Email</th>
               <th scope="col">Birth Date</th>
               <th scope="col">Enrollment No</th>
-              <th scope="col">Department</th>
               <th scope="col">Show</th>
               <th scope="col">Delete</th>
             </tr>
@@ -181,7 +192,6 @@ function Students() {
                     <td>{i.email}</td>
                     <td>{i.dateOfBirth}</td>
                     <td>{i.enrollmentNo}</td>
-                    <td>{i.department}</td>
                     <td>
                       <i
                         className="fa-solid fa-eye"

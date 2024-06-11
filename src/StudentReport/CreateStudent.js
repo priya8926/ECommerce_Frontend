@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import "./CreateStudent.css";
 import SpellcheckIcon from "@mui/icons-material/Spellcheck";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -29,19 +29,8 @@ function CreateStudent() {
     state: "",
     zipCode: "",
     enrollmentNo: "",
-    department :""
+    departmentId : 0
   });
-  const departments = [
-    "Computer Engineering",
-    "Mechanical Engineering",
-    "Electrical Engineering",
-    "Chemical Engineering",
-    " Biomedical Engineering",
-    "  Aerospace Engineering",
-    "Civil Engineering",
-    "Information Technology",
-  ];
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setStudent((prevState) => ({
@@ -49,6 +38,29 @@ function CreateStudent() {
       [name]: value,
     }));
   };
+  const [departments, setDepartments] = useState([]);
+  
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await fetch(`https://localhost:7283/api/Department/all`, {
+          method: "GET",
+          headers: {
+            'Content-type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setDepartments(data);
+        }
+      } catch (error) {
+        console.log("Error fetching departments:", error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
   const createSudentSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -68,7 +80,7 @@ function CreateStudent() {
         
       }
     } catch (error) {
-      console.log("error creatinf student report", error);
+      console.log("error creating student report", error);
     }
   };
   return (
@@ -210,11 +222,11 @@ function CreateStudent() {
             </div>
             <div className="department">
               <AccountTreeIcon />
-              <select onChange={handleInputChange} value={student.department} name="department">
+              <select onChange={handleInputChange} value={student.departmentId} name="departmentId">
                 <option value="" >Select Department</option>
-                {departments.map((d) => (
-                  <option key={d} value={d}>
-                    {d}
+                {Array.isArray(departments) && departments.map((d) => (
+                  <option key={d.departmentId} value={d.departmentId}>
+                    {d.departmentName}
                   </option>
                 ))}
               </select>
