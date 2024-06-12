@@ -77,11 +77,15 @@ function Students() {
   };
 
   const deleteStudent = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this department?");
+    if (!confirmDelete) return;
+    else{
+      alert("student report deleted!!!");
+    }
     const response = await fetch(`https://localhost:7283/api/Student/${id}`, {
       method: "DELETE",
     });
     if (response.ok) {
-      alert("student report deleted!!!");
       getAllStd();
     }
   };
@@ -196,7 +200,7 @@ function Students() {
       {allStudents.length > 0 ? (
         <table className="table mt-3 container  table-danger table-striped">
           <thead>
-            <tr>
+            <tr className="text-center">
               <th scope="col">#</th>
               <th scope="col">First Name</th>
               <th scope="col">Last Name</th>
@@ -204,6 +208,8 @@ function Students() {
               <th scope="col">Email</th>
               <th scope="col">Birth Date</th>
               <th scope="col">Enrollment No</th>
+              <th scope="col">Term Fees</th>
+              <th scope="col">Deparment</th>
               <th scope="col">Show</th>
               <th scope="col">Delete</th>
             </tr>
@@ -212,14 +218,16 @@ function Students() {
             {allStudents.map((i, index) => {
               return (
                 <>
-                  <tr key={index}>
+                  <tr key={index} className="text-center">
                     <td>{index + 1}</td>
                     <td>{i.firstName}</td>
                     <td>{i.lastName}</td>
                     <td>{i.gender}</td>
                     <td>{i.email}</td>
                     <td>{i.dateOfBirth}</td>
-                    <td>{i.enrollmentNo}</td>
+                    <td >{i.enrollmentNo}</td>
+                    <td >{i.fees}</td>
+                    <td>{i.departmentName}</td>
                     <td>
                       <i
                         className="fa-solid fa-eye"
@@ -245,6 +253,7 @@ function Students() {
           <h4>No Record Found!!</h4>
         </div>
       )}
+      
     </>
   );
 }

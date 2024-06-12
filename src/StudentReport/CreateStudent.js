@@ -12,6 +12,7 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import AbcIcon from "@mui/icons-material/Abc";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import PersonIcon from "@mui/icons-material/Person";
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +25,7 @@ function CreateStudent() {
     gender: "",
     email: "",
     phoneNumber: "",
+    fees : "",
     address: "",
     city: "",
     state: "",
@@ -179,6 +181,15 @@ function CreateStudent() {
                 onChange={handleInputChange}
                 placeholder="Enter your Phone number"
               />
+            </div>
+            <div>
+              <CurrencyRupeeIcon/>
+              <input
+              type="number"
+              value={student.fees}
+              name = "fees"
+              onChange= {handleInputChange}
+              placeholder= "your fees"/>
             </div>
             <div>
               <StorageIcon />

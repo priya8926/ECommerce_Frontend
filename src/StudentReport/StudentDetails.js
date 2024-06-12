@@ -21,7 +21,7 @@ function StudentDetails() {
   return (
     <>
     {stdDetails.length> 0 ? (
-     <table className="table mt-5 container table-danger table-striped">
+     <table className="table mt-5 mb-5 container table-secondary table-striped">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -31,6 +31,7 @@ function StudentDetails() {
               <th scope="col">Email</th>
               <th scope="col">Birth Date</th>
               <th scope="col">Enrollment No</th>
+              <th scope="col">Term Fees</th>
               <th scope="col">Contact</th>
               <th scope="col">Gender</th>
               <th scope="col">Address</th>
@@ -49,6 +50,7 @@ function StudentDetails() {
                     <td>{item.email}</td>
                     <td>{item.dateOfBirth}</td>
                     <td>{item.enrollmentNo}</td>
+                    <td>{item.fees}</td>
                     <td>{item.phoneNumber}</td>
                     <td>{item.gender}</td>
                     <td>{item.address}</td>

@@ -30,7 +30,7 @@ function Department() {
   };
 
   const addDept = async () => {
-    if (newDept.length <= 0) {
+    if (newDept.trim() === "") {
       alert("Department name cannot be empty.");
       return;
     }
@@ -43,7 +43,12 @@ function Department() {
     });
     if (response.ok) {
       const data = await response.json();
-      setDepartment(() => [...department, data]);
+      setDepartment((prev) => [...prev, {
+        departmentName :data.department.departmentName,
+        departmentId : data.department.departmentId,
+        studentCount : 0,
+        totalFees : 0
+      }]);
       setNewDept("");
       alert("Department added");
     }
@@ -61,7 +66,7 @@ function Department() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ departmentName: editDept }),
+          body: JSON.stringify({ departmentName: editDept ,  }),
         }
       );
       if (response.ok) {
@@ -82,6 +87,11 @@ function Department() {
   };
 
   const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this department?");
+    if (!confirmDelete) return;
+    else{
+      alert("Deparment deleted")
+    }
     const response = await fetch(
       `https://localhost:7283/api/Department/${id}`,
       {
@@ -101,7 +111,7 @@ const veiwData = async()=>{
 
   return (
     <>
-      <div className=" w-25 mb-3 mt-3 container">
+      <div className=" w-25 mb-5 mt-3  container">
         <h6>
           <label className="form-label mt-3">Add Department : </label>
         </h6>
@@ -124,10 +134,11 @@ const veiwData = async()=>{
           <>
             <table className="table mt-3 container  table-danger table-striped">
               <thead>
-                <tr>
+                <tr className="text-center">
                   <th scope="col">#</th>
                   <th scope="col">Department Name</th>
                   <th scope="col">Total No of students</th>
+                  <th scope="col">Total Fees</th>
                   <th scope="col">View</th>
                   <th scope="col">Edit</th>
                   <th scope="col">Delete</th>
@@ -136,10 +147,11 @@ const veiwData = async()=>{
               <tbody>
                 {department.map((item, i) => {
                   return (
-                    <tr key={i}>
+                    <tr key={i} className="text-center">
                       <td>{i + 1}</td>
                       <td>{item.departmentName}</td>
-                      <td  className="text-center">{item.studentCount}</td>
+                      <td >{item.studentCount}</td>
+                      <td>{item.totalFees}</td>
                       <Link to={`/department/studentDetails/${item.departmentId}`}>
                       <td>
                         <i
