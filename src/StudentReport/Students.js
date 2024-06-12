@@ -2,21 +2,23 @@ import React, { useEffect, useRef, useState } from "react";
 
 function Students() {
   const [allStudents, setAllStudents] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const ref = useRef()
-
-  
+  const [selectedDept, setSelectedDept] = useState(null);
   const [departments, setDepartments] = useState([]);
-  
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const ref = useRef();
+
   useEffect(() => {
     const fetchDepartment = async () => {
       try {
-        const response = await fetch(`https://localhost:7283/api/Department/all`, {
-          method: "GET",
-          headers: {
-            'Content-type': 'application/json',
-          },
-        });
+        const response = await fetch(
+          `https://localhost:7283/api/Department/all`,
+          {
+            method: "GET",
+            headers: {
+              "Content-type": "application/json",
+            },
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           setDepartments(data);
@@ -27,6 +29,7 @@ function Students() {
     };
 
     fetchDepartment();
+    getAllStd();
   }, []);
 
   const getAllStd = async () => {
@@ -36,7 +39,7 @@ function Students() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setAllStudents(data);
       }
     } catch (error) {
@@ -60,16 +63,17 @@ function Students() {
       console.log(error);
     }
   };
+  useEffect(() => {
+    if (selectedDept === "") {
+      getAllStd();
+    } else {
+      getStdByDepartment(selectedDept);
+    }
+  }, [selectedDept]);
 
   const handleDepartmentChange = (e) => {
     const selectDepartment = e.target.value;
-    setDepartments(selectDepartment);
-
-    if (selectDepartment === "") {
-      getAllStd();
-    } else {
-      getStdByDepartment(selectDepartment);
-    }
+    setSelectedDept(selectDepartment);
   };
 
   const deleteStudent = async (id) => {
@@ -83,8 +87,8 @@ function Students() {
   };
 
   const ShowData = async (item) => {
-    setSelectedStudent(item)
-    ref.current.click()
+    setSelectedStudent(item);
+    ref.current.click();
   };
   useEffect(() => {
     getAllStd();
@@ -94,7 +98,7 @@ function Students() {
       <>
         {/* Button trigger modal */}
         <button
-        ref={ref}
+          ref={ref}
           type="button"
           className="btn btn-primary d-none"
           data-bs-toggle="modal"
@@ -117,23 +121,46 @@ function Students() {
                   Student Report
                 </h5>
               </div>
-         <div>
-          {selectedStudent && (
-            <div className="modal-body">
-                <p><strong>First Name :</strong> {selectedStudent.firstName}</p>
-                <p><strong>Last Name :</strong> {selectedStudent.lastName}</p>
-                <p><strong>Email:</strong> {selectedStudent.email}</p>
-                <p><strong>Enrollment Number:</strong> {selectedStudent.enrollmentNo}</p>
-                <p><strong>BirthDate:</strong> {selectedStudent.dateOfBirth}</p>
-                <p><strong>Contact:</strong> {selectedStudent.phoneNumber}</p>
-                <p><strong>Gender :</strong> {selectedStudent.gender}</p>
-                <p><strong>address:</strong> {selectedStudent.address}</p>
-                <p><strong>City:</strong> {selectedStudent.city}</p>
-                <p><strong>State:</strong> {selectedStudent.state}</p>
-                <p><strong>Zipcode:</strong> {selectedStudent.zipCode}</p>
-            </div>
-          )}
-         </div>
+              <div>
+                {selectedStudent && (
+                  <div className="modal-body">
+                    <p>
+                      <strong>First Name :</strong> {selectedStudent.firstName}
+                    </p>
+                    <p>
+                      <strong>Last Name :</strong> {selectedStudent.lastName}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {selectedStudent.email}
+                    </p>
+                    <p>
+                      <strong>Enrollment Number:</strong>{" "}
+                      {selectedStudent.enrollmentNo}
+                    </p>
+                    <p>
+                      <strong>BirthDate:</strong> {selectedStudent.dateOfBirth}
+                    </p>
+                    <p>
+                      <strong>Contact:</strong> {selectedStudent.phoneNumber}
+                    </p>
+                    <p>
+                      <strong>Gender :</strong> {selectedStudent.gender}
+                    </p>
+                    <p>
+                      <strong>address:</strong> {selectedStudent.address}
+                    </p>
+                    <p>
+                      <strong>City:</strong> {selectedStudent.city}
+                    </p>
+                    <p>
+                      <strong>State:</strong> {selectedStudent.state}
+                    </p>
+                    <p>
+                      <strong>Zipcode:</strong> {selectedStudent.zipCode}
+                    </p>
+                  </div>
+                )}
+              </div>
               <div className="modal-footer">
                 <button
                   type="button"
@@ -154,15 +181,16 @@ function Students() {
         </span>
         <select
           onChange={handleDepartmentChange}
-          value={departments}
-          name="departments"
+          value={selectedDept}
+          name="selectedDept"
         >
           <option value="">Select Department</option>
-          {Array.isArray(departments) && departments.map((d) => (
-                  <option key={d.departmentId} value={d.departmentId}>
-                    {d.departmentName}
-                  </option>
-                ))}
+          {Array.isArray(departments) &&
+            departments.map((d) => (
+              <option key={d.departmentId} value={d.departmentId}>
+                {d.departmentName}
+              </option>
+            ))}
         </select>
       </div>
       {allStudents.length > 0 ? (

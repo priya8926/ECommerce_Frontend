@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 function StudentDetails() {
     const[stdDetails , setStdDetails] = useState([])
@@ -63,6 +63,11 @@ function StudentDetails() {
           <div className='container mt-5 '>
           <h3 className='text-center'>No Record Found!!</h3>
           </div>}
+          <div className='container text-center mt-5'>
+            <Link to="/department">
+            <button className='btn btn-primary'>Go Back</button>
+            </Link>
+          </div>
     </>
   )
 }

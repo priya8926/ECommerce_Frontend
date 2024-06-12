@@ -6,8 +6,7 @@ function Department() {
   const [newDept, setNewDept] = useState("");
   const [editDept, setEditDept] = useState("");
   const [editDeptId, setEditDeptId] = useState("");
-
-  const ref = useRef();
+  const [isEditing, setIsEditing] = useState(false);
 
   const getAllDepartment = async () => {
     try {
@@ -67,7 +66,10 @@ function Department() {
       );
       if (response.ok) {
         getAllDepartment();
-        ref.current.click();
+        setIsEditing(false)
+        setEditDept("")
+        setEditDeptId("")
+        alert("Department updated");
       }
     } catch (error) {
       console.log(error);
@@ -76,7 +78,7 @@ function Department() {
   const updateDepartment = (item) => {
     setEditDept(item.departmentName);
     setEditDeptId(item.departmentId);
-    ref.current.click();
+    setIsEditing(true)
   };
 
   const handleDelete = async (id) => {
@@ -99,60 +101,6 @@ const veiwData = async()=>{
 
   return (
     <>
-      {/* Button trigger modal */}
-      <button
-        ref={ref}
-        type="button"
-        className="btn btn-primary d-none"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
-        Launch demo modal
-      </button>
-      {/* Modal */}
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex={-1}
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
-                Update Department
-              </h5>
-            </div>
-            <div className="modal-body">
-              <input
-                type="text"
-                name="editDept"
-                value={editDept}
-                onChange={(e) => setEditDept(e.target.value)}
-                className="form-control"
-              />
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={updateDept}
-              >
-                Save changes
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className=" w-25 mb-3 mt-3 container">
         <h6>
           <label className="form-label mt-3">Add Department : </label>
@@ -163,11 +111,11 @@ const veiwData = async()=>{
             type="text"
             className="form-control"
             placeholder="Enter Department name"
-            value={newDept}
-            onChange={(e) => setNewDept(e.target.value)}
+            value={isEditing ? editDept : newDept}
+            onChange={(e) => isEditing ? setEditDept(e.target.value) : setNewDept(e.target.value)}
           />
-          <button className="btn btn-primary" type="button" onClick={addDept}>
-            Add
+          <button className="btn btn-primary" type="button" onClick={isEditing ? updateDept : addDept}>
+            {isEditing ? "Update" : "Add"}
           </button>
         </div>
       </div>
@@ -192,7 +140,7 @@ const veiwData = async()=>{
                       <td>{i + 1}</td>
                       <td>{item.departmentName}</td>
                       <td  className="text-center">{item.studentCount}</td>
-                      <Link to={`/studentDetails/${item.departmentId}`}>
+                      <Link to={`/department/studentDetails/${item.departmentId}`}>
                       <td>
                         <i
                           className="fa-solid fa-eye"
