@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 
 function Attendence() {
   const [student, setStudent] = useState([]);
-  const [selectedStd, setSelectedStd] = useState(null);
-  const [date, setDate] = useState([]);
+  const [selectedStd, setSelectedStd] = useState("");
   const [isPresent, setIsPresent] = useState("");
   const [remark, setRemark] = useState("");
   const [attendance, setAttendance] = useState([]);
   const [allAtd, setAllAtd] = useState([]);
+  const [date, setDate] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
 
   const getAllStd = async () => {
@@ -28,10 +28,12 @@ function Attendence() {
   };
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
+    atteByDate(e.target.value);
   };
 
   const addAttendance = async () => {
     try {
+      const formattedDate = new Date().toISOString();
       const response = await fetch(
         `https://localhost:7283/api/Attendance/attendance`,
         {
@@ -41,7 +43,7 @@ function Attendence() {
           },
           body: JSON.stringify({
             studentID: selectedStd,
-            date,
+            date: selectedDate,
             isPresent,
             remark,
           }),
@@ -49,9 +51,13 @@ function Attendence() {
       );
       if (response.ok) {
         const data = await response.json();
-        getAllAtd();
         setAttendance(data);
-        alert("attendace added");
+        getAllAtd(); 
+        if (data.result) {
+          alert(data.message);
+        } else {
+          alert(data.message);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -75,10 +81,31 @@ function Attendence() {
       console.log(error);
     }
   };
-  useEffect(() => {
+  const atteByDate = async (selectedDate) => {
+    try {
+      const response = await fetch(
+        `https://localhost:7283/api/Attendance/${selectedDate}`,
+        {
+          method: "GET",
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data, "dateee");
+        setAllAtd(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect((e) => {
     getAllStd();
-    getAllAtd();
-  }, []);
+    if (!selectedDate) {
+      getAllAtd();
+    } else {
+      atteByDate(selectedDate);
+    }
+  }, [selectedDate]);
   return (
     <>
       <div className="d-flex mt-5 container">
@@ -108,8 +135,8 @@ function Attendence() {
               <input
                 type="date"
                 id="attendanceDate"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                value={selectedDate}
+                onChange={handleDateChange}
               />
             </span>
             {date && (
@@ -178,40 +205,42 @@ function Attendence() {
             ))}
         </select>
       </div>
-      {allAtd.length > 0 ? (
-        <table className="table mt-3 container  table-warning table-striped">
-          <thead>
-            <tr className="text-center">
-              <th scope="col">#</th>
-              <th scope="col">Date</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">Enrollment No</th>
-              <th scope="col">Deparment</th>
-              <th scope="col">IsPresent</th>
-              <th scope="col">Remark</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allAtd.map((i, index) => (
-              <tr key={index} className="text-center">
-                <td>{index + 1}</td>
-                <td>{i.date}</td>
-                <td>{i.firstName}</td>
-                <td>{i.lastName}</td>
-                <td>{i.enrollmentNo}</td>
-                <td>{i.departmentName}</td>
-                <td>{i.isPresent}</td>
-                <td>{i.remark}</td>
+      <div className="">
+        {allAtd.length > 0 ? (
+          <table className="table mt-3 container  table-warning table-striped">
+            <thead>
+              <tr className="text-center">
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Enrollment No</th>
+                <th scope="col">Deparment</th>
+                <th scope="col">IsPresent</th>
+                <th scope="col">Remark</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div className="container text-center mt-5">
-          <h4>No Record!!</h4>
-        </div>
-      )}
+            </thead>
+            <tbody>
+              {allAtd.map((i, index) => (
+                <tr key={index} className="text-center">
+                  <td>{index + 1}</td>
+                  <td>{i.date}</td>
+                  <td>{i.firstName}</td>
+                  <td>{i.lastName}</td>
+                  <td>{i.enrollmentNo}</td>
+                  <td>{i.departmentName}</td>
+                  <td>{i.isPresent}</td>
+                  <td>{i.remark}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="container text-center mt-5">
+            <h4>No Record!!</h4>
+          </div>
+        )}
+      </div>
     </>
   );
 }
