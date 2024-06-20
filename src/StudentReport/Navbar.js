@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function Navbar() {
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-primary ">
+      <nav className="navbar navbar-expand-lg navbar-light bg-primary">
         <div className="container-fluid">
           <Link className="navbar-brand" to="#">
             Report
@@ -39,6 +39,36 @@ function Navbar() {
               <li className="nav-item">
                 <Link className="nav-link" to="/attendence">
                   Attendence
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/attendance/report">
+                  Attendence By Department
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/attendance/report/date">
+                  Attendence By Date
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/college/new">
+                  College
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/college/all">
+                  All College
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/college/faculty">
+                  Faculty
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/college/faculty/all">
+                  All Faculty
                 </Link>
               </li>
             </ul>
