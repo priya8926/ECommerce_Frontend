@@ -28,7 +28,7 @@ function Navbar() {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/all">
-                  Data
+                  All Students
                 </Link>
               </li>
               <li className="nav-item">

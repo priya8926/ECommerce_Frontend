@@ -1,14 +1,44 @@
 import React, { useEffect, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
 
 function Attendence() {
   const [student, setStudent] = useState([]);
   const [selectedStd, setSelectedStd] = useState("");
   const [isPresent, setIsPresent] = useState("");
   const [remark, setRemark] = useState("");
-  const [attendance, setAttendance] = useState([]);
   const [allAtd, setAllAtd] = useState([]);
   const [date, setDate] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const columns = [
+    { field: "id", headerName: "#", minWidth: 50 },
+    { field: "date", headerName: "Date", minWidth: 200, flex: 0.5 },
+    { field: "firstName", headerName: "First Name", minWidth: 100, flex: 0.3 },
+    { field: "lastName", headerName: "Last Name", minWidth: 100, flex: 0.5 },
+    {
+      field: "enrollmentNo",
+      headerName: "Enrollment No",
+      minWidth: 50,
+      flex: 0.5,
+    },
+    { field: "department", headerName: "Department", minWidth: 200, flex: 0.5 },
+    { field: "isPresent", headerName: "IsPresent", minWidth: 70, flex: 0.5 },
+    { field: "remark", headerName: "Remark", minWidth: 100, flex: 0.5 },
+  ];
+
+  const rows = allAtd.map((item, index) => ({
+    id: index + 1,
+    firstName: item.firstName,
+    lastName: item.lastName,
+    date: item.date,
+    enrollmentNo: item.enrollmentNo,
+    department: item.departmentName,
+    isPresent: item.isPresent,
+    remark: item.remark,
+  }));
 
   const getAllStd = async () => {
     try {
@@ -33,7 +63,7 @@ function Attendence() {
 
   const addAttendance = async () => {
     try {
-      const formattedDate = new Date().toISOString();
+      // const formattedDate = new Date().toISOString();
       const response = await fetch(
         `https://localhost:7283/api/Attendance/attendance`,
         {
@@ -51,8 +81,7 @@ function Attendence() {
       );
       if (response.ok) {
         const data = await response.json();
-        setAttendance(data);
-        getAllAtd(); 
+        getAllAtd(pageNumber, pageSize);
         if (data.result) {
           alert(data.message);
         } else {
@@ -63,18 +92,19 @@ function Attendence() {
       console.log(error);
     }
   };
-  const getAllAtd = async () => {
+  const getAllAtd = async (pageNumber, pageSize) => {
     try {
-      const response = await fetch(
-        `https://localhost:7283/api/Attendance/all`,
-        {
-          method: "GET",
-        }
-      );
+      const link = `https://localhost:7283/api/Attendance/all?pageNo=${pageNumber}&pageSize=${pageSize}`;
+      const response = await fetch(link, {
+        method: "GET",
+      });
+      console.log(link);
       if (response.ok) {
         const data = await response.json();
-        setAllAtd(data);
-        const uniqueDates = [...new Set(data.map((item) => item.date))];
+        console.log(data);
+        setAllAtd(data.data);
+        setTotalRecords(data.totalRecords);
+        const uniqueDates = [...new Set(data.data.map((item) => item.date))];
         setDate(uniqueDates);
       }
     } catch (error) {
@@ -91,21 +121,20 @@ function Attendence() {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data, "dateee");
         setAllAtd(data);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect((e) => {
+  useEffect(() => {
     getAllStd();
     if (!selectedDate) {
-      getAllAtd();
+      getAllAtd(pageNumber, pageSize);
     } else {
       atteByDate(selectedDate);
     }
-  }, [selectedDate]);
+  }, [selectedDate, pageNumber, pageSize]);
   return (
     <>
       <div className="d-flex mt-5 container">
@@ -186,55 +215,60 @@ function Attendence() {
         )}
       </div>
       <h4 className="text-center mt-4">Student's Attendance Report</h4>
-      <div className="mx-3">
-        <span>
-          <strong>Sort By Date : </strong>
-        </span>
-        <select
-          onChange={handleDateChange}
-          value={selectedDate}
-          name="selectedDate"
-          className="text-center"
-        >
-          <option value="">Select Date</option>
-          {Array.isArray(date) &&
-            date.map((d, i) => (
-              <option key={i} value={d}>
-                {d}
-              </option>
-            ))}
-        </select>
-      </div>
-      <div className="">
-        {allAtd.length > 0 ? (
-          <table className="table mt-3 container  table-warning table-striped">
-            <thead>
-              <tr className="text-center">
-                <th scope="col">#</th>
-                <th scope="col">Date</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Enrollment No</th>
-                <th scope="col">Deparment</th>
-                <th scope="col">IsPresent</th>
-                <th scope="col">Remark</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allAtd.map((i, index) => (
-                <tr key={index} className="text-center">
-                  <td>{index + 1}</td>
-                  <td>{i.date}</td>
-                  <td>{i.firstName}</td>
-                  <td>{i.lastName}</td>
-                  <td>{i.enrollmentNo}</td>
-                  <td>{i.departmentName}</td>
-                  <td>{i.isPresent}</td>
-                  <td>{i.remark}</td>
-                </tr>
+
+      <div
+        className="mx-3 mt-4 d-flex"
+        style={{ justifyContent: "space-evenly" }}
+      >
+        <div>
+          <span>
+            <strong>Sort By Date : </strong>
+          </span>
+          <select
+            onChange={handleDateChange}
+            value={selectedDate}
+            name="selectedDate"
+            className="text-center"
+          >
+            <option value="">Select Date</option>
+            {Array.isArray(date) &&
+              date.map((d, i) => (
+                <option key={i} value={d}>
+                  {d}
+                </option>
               ))}
-            </tbody>
-          </table>
+          </select>
+        </div>
+        <div>
+          <input type="text" placeholder="Search..." />
+          <button className="btn btn-primary mx-2">Search</button>
+        </div>
+      </div>
+
+      <div>
+        {allAtd.length > 0 ? (
+          <div className="container">
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={pageSize}
+              pageSizeOptions={[5, 10, 20, 50]}
+              autoHeight
+              rowCount={totalRecords}
+              sortingOrder={["asc", "desc"]}
+              disableRowSelectionOnClick
+              className="table-success m-5"
+              paginationMode="server"
+              // onPageSizeChange={handlePageSizeChange}
+              // onPageChange={handlePageChange}
+              pagination={true}
+              paginationModel={{ page: pageNumber, pageSize }}
+              onPaginationModelChange={(params) => {
+                setPageNumber(params.page);
+                setPageSize(params.pageSize);
+              }}
+            />
+          </div>
         ) : (
           <div className="container text-center mt-5">
             <h4>No Record!!</h4>

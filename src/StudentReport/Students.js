@@ -1,12 +1,93 @@
 import React, { useEffect, useRef, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function Students() {
   const [allStudents, setAllStudents] = useState([]);
   const [selectedDept, setSelectedDept] = useState(null);
   const [departments, setDepartments] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
   const ref = useRef();
 
+  const columns = [
+    { field: "id", headerName: "#", minWidth: 50 },
+    { field: "firstName", headerName: "First Name", minWidth: 150, flex: 0.4 },
+    { field: "lastName", headerName: "Last Name", minWidth: 150, flex: 0.4 },
+    { field: "gender", headerName: "Gender", minWidth: 150, flex: 0.3 },
+    {
+      field: "birthdate",
+      headerName: "Date Of Birth",
+      minWidth: 150,
+      flex: 0.4,
+    },
+    { field: "email", headerName: "Email", minWidth: 200, flex: 0.5 },
+    {
+      field: "enrollmentNo",
+      headerName: "Entrollment No",
+      minWidth: 100,
+      flex: 0.3,
+    },
+    { field: "termFees", headerName: "Term Fees", minWidth: 150, flex: 0.3 },
+    { field: "department", headerName: "Department", minWidth: 200, flex: 0.4 },
+    {
+      field: "view",
+      headerName: "View",
+      minWidth: 50,
+      flex: 0.2,
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Button
+            color="primary"
+            startIcon={<VisibilityIcon />}
+            onClick={() => ShowData(params.row)}
+          ></Button>
+        );
+      },
+    },
+    {
+      field: "delete",
+      headerName: "Delete",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Button
+            color="secondary"
+            startIcon={<DeleteIcon />}
+            onClick={() => deleteStudent(params.row.studentID)}
+          ></Button>
+        );
+      },
+    },
+  ];
+  const rows = [];
+
+  allStudents &&
+    allStudents.forEach((item, index) => {
+      rows.push({
+        id: index + 1,
+        studentID: item.studentID,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        gender: item.gender,
+        birthdate: item.dateOfBirth,
+        email: item.email,
+        enrollmentNo: item.enrollmentNo,
+        termFees: item.fees,
+        department: item.departmentName,
+        address: item.address,
+        city: item.city,
+        state: item.state,
+        zipCode: item.zipCode,
+        phoneNumber: item.phoneNumber,
+      });
+    });
   useEffect(() => {
     const fetchDepartment = async () => {
       try {
@@ -77,9 +158,11 @@ function Students() {
   };
 
   const deleteStudent = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this department?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this department?"
+    );
     if (!confirmDelete) return;
-    else{
+    else {
       alert("student report deleted!!!");
     }
     const response = await fetch(`https://localhost:7283/api/Student/${id}`, {
@@ -92,6 +175,7 @@ function Students() {
 
   const ShowData = async (item) => {
     setSelectedStudent(item);
+    console.log(item, "hiiii");
     ref.current.click();
   };
   useEffect(() => {
@@ -142,7 +226,11 @@ function Students() {
                       {selectedStudent.enrollmentNo}
                     </p>
                     <p>
-                      <strong>BirthDate:</strong> {selectedStudent.dateOfBirth}
+                      <strong>Term Fees:</strong> {selectedStudent.termFees}
+                    </p>
+                    <p>
+                      <strong>BirthDate:</strong>
+                      {selectedStudent.birthdate}
                     </p>
                     <p>
                       <strong>Contact:</strong> {selectedStudent.phoneNumber}
@@ -198,62 +286,76 @@ function Students() {
         </select>
       </div>
       {allStudents.length > 0 ? (
-        <table className="table mt-3 container  table-danger table-striped">
-          <thead>
-            <tr className="text-center">
-              <th scope="col">#</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">Gender</th>
-              <th scope="col">Email</th>
-              <th scope="col">Birth Date</th>
-              <th scope="col">Enrollment No</th>
-              <th scope="col">Term Fees</th>
-              <th scope="col">Deparment</th>
-              <th scope="col">Show</th>
-              <th scope="col">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allStudents.map((i, index) => {
-              return (
-                <>
-                  <tr key={index} className="text-center">
-                    <td>{index + 1}</td>
-                    <td>{i.firstName}</td>
-                    <td>{i.lastName}</td>
-                    <td>{i.gender}</td>
-                    <td>{i.email}</td>
-                    <td>{i.dateOfBirth}</td>
-                    <td >{i.enrollmentNo}</td>
-                    <td >{i.fees}</td>
-                    <td>{i.departmentName}</td>
-                    <td>
-                      <i
-                        className="fa-solid fa-eye"
-                        style={{ color: "#3e4aea" }}
-                        onClick={() => ShowData(i)}
-                      />
-                    </td>
-                    <td>
-                      <i
-                        className="fa-solid fa-trash"
-                        style={{ color: "#db3d45" }}
-                        onClick={() => deleteStudent(i.studentID)}
-                      />
-                    </td>
-                  </tr>
-                </>
-              );
-            })}
-          </tbody>
-        </table>
+        // <table className="table mt-3 container  table-danger table-striped">
+        //   <thead>
+        //     <tr className="text-center">
+        //       <th scope="col">#</th>
+        //       <th scope="col">First Name</th>
+        //       <th scope="col">Last Name</th>
+        //       <th scope="col">Gender</th>
+        //       <th scope="col">Email</th>
+        //       <th scope="col">Birth Date</th>
+        //       <th scope="col">Enrollment No</th>
+        //       <th scope="col">Term Fees</th>
+        //       <th scope="col">Deparment</th>
+        //       <th scope="col">Show</th>
+        //       <th scope="col">Delete</th>
+        //     </tr>
+        //   </thead>
+        //   <tbody>
+        //     {allStudents.map((i, index) => {
+        //       return (
+        //         <>
+        //           <tr key={index} className="text-center">
+        //             <td>{index + 1}</td>
+        //             <td>{i.firstName}</td>
+        //             <td>{i.lastName}</td>
+        //             <td>{i.gender}</td>
+        //             <td>{i.email}</td>
+        //             <td>{i.dateOfBirth}</td>
+        //             <td >{i.enrollmentNo}</td>
+        //             <td >{i.fees}</td>
+        //             <td>{i.departmentName}</td>
+        //             <td>
+        //               <i
+        //                 className="fa-solid fa-eye"
+        //                 style={{ color: "#3e4aea" }}
+        //                 onClick={() => ShowData(i)}
+        //               />
+        //             </td>
+        //             <td>
+        //               <i
+        //                 className="fa-solid fa-trash"
+        //                 style={{ color: "#db3d45" }}
+        //                 onClick={() => deleteStudent(i.studentID)}
+        //               />
+        //             </td>
+        //           </tr>
+        //         </>
+        //       );
+        //     })}
+        //   </tbody>
+        // </table>
+        <div>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={paginationModel.pageSize}
+            onPageSizeChange = {(newPageSize) => setPaginationModel({...paginationModel , pageSize : newPageSize })}
+            pagination
+            paginationModel={paginationModel}
+            onPaginationModelChange={(model) => setPaginationModel(model)}
+            pageSizeOptions={[5,10,20,50]}
+            disableRowSelectionOnClick
+            autoHeight
+            className="table-danger m-5"
+          />
+        </div>
       ) : (
         <div className="container m-5">
           <h4>No Record Found!!</h4>
         </div>
       )}
-      
     </>
   );
 }
