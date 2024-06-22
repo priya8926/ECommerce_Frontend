@@ -9,9 +9,10 @@ function Attendence() {
   const [allAtd, setAllAtd] = useState([]);
   const [date, setDate] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const columns = [
     { field: "id", headerName: "#", minWidth: 50 },
@@ -60,7 +61,15 @@ function Attendence() {
     setSelectedDate(e.target.value);
     atteByDate(e.target.value);
   };
-
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+const handlePageSizeChange = ((newPageSize) =>{
+  setPageSize({...pageSize , pageSize : newPageSize})
+})
+  const handleSearch = () => {
+    getAllAtd(pageNo, pageSize);
+  };
   const addAttendance = async () => {
     try {
       // const formattedDate = new Date().toISOString();
@@ -81,7 +90,7 @@ function Attendence() {
       );
       if (response.ok) {
         const data = await response.json();
-        getAllAtd(pageNumber, pageSize);
+        getAllAtd(pageNo, pageSize);
         if (data.result) {
           alert(data.message);
         } else {
@@ -92,9 +101,12 @@ function Attendence() {
       console.log(error);
     }
   };
-  const getAllAtd = async (pageNumber, pageSize) => {
+  const getAllAtd = async (pageNo, pageSize) => {
     try {
-      const link = `https://localhost:7283/api/Attendance/all?pageNo=${pageNumber}&pageSize=${pageSize}`;
+      let link = `https://localhost:7283/api/Attendance/all?pageNo=${pageNo+1}&pageSize=${pageSize}`;
+      if (searchQuery) {
+        link += `&query=${searchQuery}`;
+      }
       const response = await fetch(link, {
         method: "GET",
       });
@@ -130,11 +142,11 @@ function Attendence() {
   useEffect(() => {
     getAllStd();
     if (!selectedDate) {
-      getAllAtd(pageNumber, pageSize);
+      getAllAtd(pageNo, pageSize);
     } else {
       atteByDate(selectedDate);
     }
-  }, [selectedDate, pageNumber, pageSize]);
+  }, [selectedDate, pageNo, pageSize , searchQuery]);
   return (
     <>
       <div className="d-flex mt-5 container">
@@ -240,8 +252,9 @@ function Attendence() {
           </select>
         </div>
         <div>
-          <input type="text" placeholder="Search..." />
-          <button className="btn btn-primary mx-2">Search</button>
+          <input type="text" placeholder="Search..."   value={searchQuery}
+            onChange={handleSearchChange}/>
+          <button className="btn btn-primary mx-2 "  onClick={handleSearch}>Search</button>
         </div>
       </div>
 
@@ -259,12 +272,9 @@ function Attendence() {
               disableRowSelectionOnClick
               className="table-success m-5"
               paginationMode="server"
-              // onPageSizeChange={handlePageSizeChange}
-              // onPageChange={handlePageChange}
-              pagination={true}
-              paginationModel={{ page: pageNumber, pageSize }}
+              paginationModel={{ page: pageNo, pageSize }}
               onPaginationModelChange={(params) => {
-                setPageNumber(params.page);
+                setPageNo(params.page);
                 setPageSize(params.pageSize);
               }}
             />
